@@ -8,26 +8,7 @@ namespace SqlQuery
     {
 
 
-        //string fileName = @"C:\TestDocument.docx";
-        //private void button1_Click(object sender, EventArgs e)
-        //{
-        //    string findText = "vimal";
 
-        //    WordprocessingDocument wordDocument = WordprocessingDocument.Open(fileName, true);
-        //    MainDocumentPart mainDocument = wordDocument.MainDocumentPart;
-        //    Document document = mainDocument.Document;
-        //    Body body = document.Body;
-
-        //    var paragraphs = body.Descendants<Paragraph>();
-        //    foreach (Paragraph para in paragraphs)
-        //    {
-        //        if (hasParticularText(para, findText))
-        //        {
-        //            HighLightText(para, findText);
-        //        }
-        //    }
-        //    CloseAndSaveDocument(wordDocument);
-        //}
 
         private void CloseAndSaveDocument(WordprocessingDocument wordDocument)
         {
@@ -42,20 +23,20 @@ namespace SqlQuery
             var runCollection = paragraph.Descendants<Run>();
             Run runAfter = null;
 
-            //find the run part which contains the characters
+           
             foreach (Run run in runCollection)
             {
                 textOfRun = run.GetFirstChild<Text>().Text;
                 if (textOfRun.Contains(text))
                 {
-                    //remove the character from thsi run part
+                
                     run.GetFirstChild<Text>().Text = textOfRun.Replace(text, "");
                     runAfter = run;
                     break;
                 }
             }
 
-            //create a new run with your customization font and the character as its text
+          
             Run HighLightRun = new Run();
             RunProperties runPro = new RunProperties();
             RunFonts runFont = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman" };
@@ -74,12 +55,11 @@ namespace SqlQuery
             HighLightRun.Append(runPro);
             HighLightRun.Append(runText);
 
-            //insert the new created run part
+     
             paragraph.InsertAfter(HighLightRun, runAfter);
         }
 
-        //iterate over all the run parts of a paragraph to
-        //check if the paragraph has the characters you wan to highlight
+
         private bool hasParticularText(Paragraph paragraph, string text)
         {
             bool has = false;
@@ -98,31 +78,30 @@ namespace SqlQuery
         }
         public void WriteToWordDoc(string filepath, string txt)
         {
-            // Open a WordprocessingDocument for editing using the filepath.
+     
             using (WordprocessingDocument wordprocessingDocument =
                 WordprocessingDocument.Open(filepath, true))
             {
-                // Assign a reference to the existing document body.
+       
                 Body body = wordprocessingDocument.MainDocumentPart.Document.Body;
 
-                // Add a paragraph with some text.
+           
                 Paragraph para = body.AppendChild(new Paragraph());
                 Run run = para.AppendChild(new Run());
                 run.AppendChild(new Text(txt));
             }
         }
-        // Take the data from a two-dimensional array and build a table at the 
-        // end of the supplied document.
+
         public void CreateWordprocessingDocument(string filepath, string text)
         {
-            // Create a document by supplying the filepath. 
+
             using (WordprocessingDocument wordDocument =
                 WordprocessingDocument.Create(filepath, WordprocessingDocumentType.Document))
             {
-                // Add a main document part. 
+    
                 MainDocumentPart mainPart = wordDocument.AddMainDocumentPart();
 
-                // Create the document structure and add some text.
+     
                 mainPart.Document = new Document();
                 Body body = mainPart.Document.AppendChild(new Body());
                 Paragraph para = body.AppendChild(new Paragraph());
@@ -182,7 +161,7 @@ namespace SqlQuery
                         var tc = new TableCell();
                         tc.Append(new Paragraph(new Run(new Text(data[i, j]))));
 
-                        // Assume you want columns that are automatically sized.
+                     
                         tc.Append(new TableCellProperties(
                             new TableCellWidth { Type = TableWidthUnitValues.Auto }));
 
@@ -204,19 +183,18 @@ namespace SqlQuery
         }
         public void OpenAndAddTextToWordDocument(string filepath, string txt)
         {
-            // Open a WordprocessingDocument for editing using the filepath.
+        
             WordprocessingDocument wordprocessingDocument =
                 WordprocessingDocument.Open(filepath, true);
 
-            // Assign a reference to the existing document body.
             Body body = wordprocessingDocument.MainDocumentPart.Document.Body;
 
-            // Add new text.
+
             Paragraph para = body.AppendChild(new Paragraph());
             Run run = para.AppendChild(new Run());
             run.AppendChild(new Text(txt));
 
-            // Close the handle explicitly.
+        
             wordprocessingDocument.Close();
         }
     }
